@@ -270,6 +270,35 @@ on c.car_id = m.car_id
 
 -- End CREATE TABLE
     
- 
+-- SP Custom Tools send email
+CREATE OR REPLACE PROCEDURE "SEND_EMAIL"("RECIPIENT_EMAIL" VARCHAR, "SUBJECT" VARCHAR, "BODY" VARCHAR)
+RETURNS VARCHAR
+LANGUAGE PYTHON
+RUNTIME_VERSION = '3.12'
+PACKAGES = ('snowflake-snowpark-python')
+HANDLER = 'send_email'
+EXECUTE AS OWNER
+AS '
+def send_email(session, recipient_email, subject, body):
+    try:
+        # Escape single quotes in the body
+        escaped_body = body.replace("''", "''''")
+        
+        # Execute the system procedure call
+        session.sql(f"""
+            CALL SYSTEM$SEND_EMAIL(
+                ''my_email_int'',
+                ''{recipient_email}'',
+                ''{subject}'',
+                ''{escaped_body}'',
+                ''text/html''
+            )
+        """).collect()
+        
+        return "Email sent successfully"
+    except Exception as e:
+        return f"Error sending email: {str(e)}"
+';
+
 
 
