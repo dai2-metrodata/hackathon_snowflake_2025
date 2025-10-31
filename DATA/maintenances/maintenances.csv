@@ -1,0 +1,55 @@
+maintenance_id,car_id,maintenance_type,maintenance_date,cost,description,next_maintenance_date,odometer_at_maintenance,maintenance_status,workshop_location
+MNT1_500,1,Battery Check,2025-01-25,350000,"Battery health assessment, terminal cleaning",2025-04-26,28445,Completed,JAKARTA
+MNT1_501,1,Battery Check,2025-04-26,350000,"Battery health assessment, terminal cleaning",2025-07-26,40069,Completed,JAKARTA
+MNT1_502,1,Battery Service,2025-07-26,420000,Battery load test and charging system check,2025-10-25,67702,Completed,JAKARTA
+MNT1_503,1,Battery Replacement,2025-10-25,2500000,Full battery replacement due to degradation,2025-12-12,51788,Scheduled,JAKARTA
+MNT2_500,2,Routine Service_2,2025-01-04,750000,"Oil change, filter replacement, brake inspection",2025-05-26,90567,Completed,JAKARTA
+MNT2_501,2,Transmission Service,2025-05-26,950000,"Transmission fluid change, system check",2025-10-15,63268,Completed,JAKARTA
+MNT2_502,2,Electrical System,2025-10-15,680000,"Wiring harness inspection, sensor calibration",2025-12-10,94266,Scheduled,JAKARTA
+MNT2_503,2,AC Service,2025-10-21,480000,AC system recharge and component check,2025-12-23,32854,Scheduled,JAKARTA
+MNT3_500,3,AC Service,2025-01-13,480000,AC system recharge and component check,2025-04-13,60724,Completed,JAKARTA
+MNT3_501,3,Transmission Check,2025-04-13,580000,Transmission diagnostic and software update,2025-07-12,38823,Completed,JAKARTA
+MNT3_502,3,Major Service,2025-07-12,1800000,"High mileage service, transmission fluid",2025-10-10,79581,Completed,JAKARTA
+MNT4_500,4,Routine Service_1,2025-01-19,700000,"Oil change, tire rotation, fluid check",2025-04-13,63743,Completed,JAKARTA
+MNT4_501,4,Tire Replacement,2025-04-13,3200000,All-season tire replacement (4 units),2025-07-06,36176,Completed,JAKARTA
+MNT4_502,4,Routine Service_3,2025-07-06,650000,"Oil change, filter replacement, inspection",2025-09-28,98276,Completed,JAKARTA
+MNT4_503,4,Routine Service_3,2025-09-28,650000,"Oil change, filter replacement, inspection",2025-12-23,54202,Scheduled,JAKARTA
+MNT5_500,5,Cooling System,2025-01-20,720000,"Coolant flush, radiator inspection",2025-06-12,28665,Completed,JAKARTA
+MNT5_501,5,Transmission Service,2025-06-12,950000,"Transmission fluid change, system check",2025-12-02,60613,Scheduled,JAKARTA
+MNT5_502,5,Major Service,2025-10-20,1800000,"High mileage service, transmission fluid",2025-11-19,27110,Scheduled,JAKARTA
+MNT5_503,5,Tire Replacement,2025-10-21,3200000,All-season tire replacement (4 units),2025-12-23,23219,Scheduled,JAKARTA
+MNT6_500,6,Cooling System,2025-01-30,720000,"Coolant flush, radiator inspection",2025-06-08,80752,Completed,JAKARTA
+MNT6_501,6,Routine Service_1,2025-06-08,700000,"Oil change, tire rotation, fluid check",2025-10-15,47797,Completed,JAKARTA
+MNT6_502,6,Intercity Service,2025-10-15,950000,Post-intercity trip inspection and service,2025-12-20,84297,Scheduled,JAKARTA
+MNT6_503,6,Routine Service_1,2025-10-22,700000,"Oil change, tire rotation, fluid check",2025-12-10,71981,Scheduled,JAKARTA
+MNT7_500,7,Routine Service_1,2025-01-24,700000,"Oil change, tire rotation, fluid check",2025-05-02,57646,Completed,JAKARTA
+MNT7_501,7,Engine Service,2025-05-02,1200000,"Major engine service, spark plug replacement",2025-08-08,21724,Completed,JAKARTA
+MNT7_502,7,Brake Service,2025-08-08,850000,"Brake pad replacement, rotor resurfacing",2025-12-21,61099,Scheduled,JAKARTA
+MNT7_503,7,Major Service,2025-10-21,1800000,"High mileage service, transmission fluid",2025-11-30,39882,Scheduled,JAKARTA
+MNT8_500,8,Electrical Check,2025-01-17,550000,Electrical system diagnostic and repair,2025-04-07,66743,Completed,JAKARTA
+MNT8_501,8,Fuel System,2025-04-07,820000,"Fuel filter replacement, injector cleaning",2025-06-26,62417,Completed,JAKARTA
+MNT8_502,8,Electrical System,2025-06-26,680000,"Wiring harness inspection, sensor calibration",2025-09-14,21663,Completed,JAKARTA
+MNT8_503,8,Electrical Check,2025-09-14,550000,Electrical system diagnostic and repair,2025-12-08,78732,Scheduled,JAKARTA
+MNT9_500,9,Electrical Check,2025-01-31,550000,Electrical system diagnostic and repair,2025-04-13,83199,Completed,JAKARTA
+MNT9_501,9,Transmission Service,2025-04-13,950000,"Transmission fluid change, system check",2025-06-24,45208,Completed,JAKARTA
+MNT9_502,9,Brake Service,2025-06-24,850000,"Brake pad replacement, rotor resurfacing",2025-09-04,61830,Completed,JAKARTA
+MNT9_503,9,Transmission Check,2025-09-04,580000,Transmission diagnostic and software update,2025-11-23,31535,Scheduled,JAKARTA
+MNT10_500,10,Electrical Check,2025-01-08,550000,Electrical system diagnostic and repair,2025-04-13,68009,Completed,JAKARTA
+MNT10_501,10,Routine Service_3,2025-04-13,650000,"Oil change, filter replacement, inspection",2025-07-17,48450,Completed,JAKARTA
+MNT10_502,10,Transmission Check,2025-07-17,580000,Transmission diagnostic and software update,2025-10-20,51349,Completed,JAKARTA
+MNT10_503,10,Cooling System,2025-10-20,720000,"Coolant flush, radiator inspection",2025-12-09,97469,Scheduled,JAKARTA
+MNT11_500,11,Intercity Service,2025-01-10,950000,Post-intercity trip inspection and service,2025-04-24,31062,Completed,JAKARTA
+MNT11_501,11,Cooling System,2025-04-24,720000,"Coolant flush, radiator inspection",2025-08-06,61194,Completed,JAKARTA
+MNT11_502,11,Engine Service,2025-08-06,1200000,"Major engine service, spark plug replacement",2025-11-12,80177,Scheduled,JAKARTA
+MNT12_500,12,Engine Service,2025-01-02,1200000,"Major engine service, spark plug replacement",2025-06-12,76578,Completed,JAKARTA
+MNT12_501,12,Fuel System,2025-06-12,820000,"Fuel filter replacement, injector cleaning",2025-11-18,81962,Scheduled,JAKARTA
+MNT12_502,12,Routine Service_1,2025-10-13,700000,"Oil change, tire rotation, fluid check",2025-11-19,37614,Scheduled,JAKARTA
+MNT13_500,13,Suspension Check,2025-01-21,600000,Suspension system inspection and alignment,2025-06-10,62976,Completed,JAKARTA
+MNT13_501,13,Transmission Service,2025-06-10,950000,"Transmission fluid change, system check",2025-10-28,76758,In Progress,JAKARTA
+MNT13_502,13,Suspension Check,2025-10-28,600000,Suspension system inspection and alignment,2025-11-19,29219,Scheduled,JAKARTA
+MNT14_500,14,Routine Service_2,2025-01-17,750000,"Oil change, filter replacement, brake inspection",2025-05-29,97071,Completed,JAKARTA
+MNT14_501,14,Routine Service_3,2025-05-29,650000,"Oil change, filter replacement, inspection",2025-10-08,83390,Completed,JAKARTA
+MNT14_502,14,Engine Service,2025-10-08,1200000,"Major engine service, spark plug replacement",2025-12-22,50646,Scheduled,JAKARTA
+MNT15_500,15,Brake Service,2025-01-21,850000,"Brake pad replacement, rotor resurfacing",2025-06-24,40650,Completed,JAKARTA
+MNT15_501,15,Tire Replacement,2025-06-24,3200000,All-season tire replacement (4 units),2025-12-12,68532,Scheduled,JAKARTA
+MNT15_502,15,Fuel System,2025-10-16,820000,"Fuel filter replacement, injector cleaning",2025-12-04,62162,Scheduled,JAKARTA

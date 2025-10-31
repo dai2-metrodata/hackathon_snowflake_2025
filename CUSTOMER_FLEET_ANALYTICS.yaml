@@ -1,0 +1,472 @@
+name: CUSTOMER_FLEET_ANALYTICS
+description: this semantic view connects to customers, rentals, cars.
+tables:
+  - name: CARS
+    description: This table stores information about a fleet of cars, including their identification details, physical characteristics, maintenance history, and rental status.
+    base_table:
+      database: HACKATHON_SNOWFLAKE
+      schema: TRANSPORTATION
+      table: CARS
+    dimensions:
+      - name: AC_TYPE
+        description: Type of transmission in the vehicle, either manual or automatic.
+        expr: AC_TYPE
+        data_type: VARCHAR(16777216)
+        sample_values:
+          - MANUAL
+          - AUTO
+      - name: BRAND
+        description: The brand of the vehicle.
+        expr: BRAND
+        data_type: VARCHAR(16777216)
+        sample_values:
+          - Honda
+          - Toyota
+          - Mitsubishi
+      - name: CAR_ID
+        description: Unique identifier for each vehicle in the database.
+        expr: CAR_ID
+        data_type: VARCHAR(16777216)
+        sample_values:
+          - '1'
+          - '3'
+          - '2'
+      - name: CAR_TYPE
+        description: The type of vehicle, categorized as either a Multi-Purpose Vehicle (MPV), a Hatchback, or a Sports Utility Vehicle (SUV).
+        expr: CAR_TYPE
+        data_type: VARCHAR(16777216)
+        sample_values:
+          - MPV
+          - HATCHBACK
+          - SUV
+      - name: COLOR
+        description: The color of the vehicle.
+        expr: COLOR
+        data_type: VARCHAR(16777216)
+        sample_values:
+          - Red
+          - White
+          - Silver
+      - name: FUEL_TYPE
+        description: Type of fuel used by the vehicle, either Pertalite (a lower-octane gasoline) or Pertamax (a higher-octane gasoline).
+        expr: FUEL_TYPE
+        data_type: VARCHAR(16777216)
+        sample_values:
+          - Pertalite
+          - Pertamax
+      - name: LICENSE_PLATE
+        description: Unique identifier for a vehicle, typically displayed on the vehicle's license plate, in the format of a combination of letters and numbers assigned by the relevant transportation authority.
+        expr: LICENSE_PLATE
+        data_type: VARCHAR(16777216)
+        sample_values:
+          - B-5678-DEF
+          - B-9012-GHI
+          - B-2468-PQR
+      - name: MODEL
+        description: The model of the car, representing the specific type or variant of the vehicle.
+        expr: MODEL
+        data_type: VARCHAR(16777216)
+        sample_values:
+          - Pajero
+          - Avanza
+          - Brio
+      - name: TRANSMISSION
+        description: Type of transmission in the vehicle, either manual or automatic.
+        expr: TRANSMISSION
+        data_type: VARCHAR(16777216)
+        sample_values:
+          - MANUAL
+          - AUTOMATIC
+    time_dimensions:
+      - name: LAST_MAINTENANCE_DATE
+        description: Date of the most recent maintenance performed on the vehicle.
+        expr: LAST_MAINTENANCE_DATE
+        data_type: DATE
+        sample_values:
+          - '2025-08-15'
+          - '2025-09-01'
+          - '2025-10-10'
+    facts:
+      - name: DAILY_RATE
+        description: The daily rental rate for a vehicle.
+        expr: DAILY_RATE
+        data_type: FLOAT
+        access_modifier: public_access
+        sample_values:
+          - '350000'
+          - '250000'
+          - '300000'
+      - name: NEXT_MAINTENANCE_KM
+        description: The distance in kilometers at which the next scheduled maintenance for the vehicle is due.
+        expr: NEXT_MAINTENANCE_KM
+        data_type: FLOAT
+        access_modifier: public_access
+        sample_values:
+          - '55000'
+          - '65000'
+          - '35000'
+      - name: SEATING_CAPACITY
+        description: The maximum number of people that can be accommodated in a vehicle.
+        expr: SEATING_CAPACITY
+        data_type: NUMBER(38,0)
+        access_modifier: public_access
+        sample_values:
+          - '8'
+          - '5'
+          - '7'
+      - name: YEAR
+        description: The model year of the vehicle.
+        expr: YEAR
+        data_type: NUMBER(38,0)
+        access_modifier: public_access
+        sample_values:
+          - '2023'
+          - '2022'
+          - '2024'
+    primary_key:
+      columns:
+        - CAR_ID
+    unique_keys:
+      - columns:
+          - LICENSE_PLATE
+  - name: CUSTOMERS
+    description: This table stores information about customers of a car rental service, including their personal details, rental history, and preferences.
+    base_table:
+      database: HACKATHON_SNOWFLAKE
+      schema: TRANSPORTATION
+      table: CUSTOMERS
+    dimensions:
+      - name: AGE_GROUP
+        description: 'The age range of the customer, categorized into three groups: 25-34 years old, 35-44 years old, and 45-54 years old.'
+        expr: AGE_GROUP
+        data_type: VARCHAR(16777216)
+        sample_values:
+          - 35-44
+          - 45-54
+          - 25-34
+      - name: CUSTOMER_ID
+        description: Unique identifier for each customer in the database, used to distinguish and track individual customer interactions and transactions.
+        expr: CUSTOMER_ID
+        data_type: VARCHAR(16777216)
+        sample_values:
+          - '109'
+          - '103'
+          - '119'
+      - name: CUSTOMER_NAME
+        description: The name of the customer, typically used to identify and personalize interactions with individual customers.
+        expr: CUSTOMER_NAME
+        data_type: VARCHAR(16777216)
+        sample_values:
+          - Denny Setiawan
+          - Budi Santoso
+          - Andi Wijaya
+      - name: DRIVER_LICENSE_NUMBER
+        description: Unique identifier issued to a customer by the relevant state or national authority, used to verify their identity and driving privileges.
+        expr: DRIVER_LICENSE_NUMBER
+        data_type: VARCHAR(16777216)
+        sample_values:
+          - '1234567890123456'
+          - '9988776655443322'
+          - '1122334455667788'
+      - name: EMAIL
+        description: The email address of the customer.
+        expr: EMAIL
+        data_type: VARCHAR(16777216)
+        sample_values:
+          - sari@email.com
+          - budi@email.com
+          - agus@email.com
+      - name: HOME_CITY
+        description: The city where the customer is based.
+        expr: HOME_CITY
+        data_type: VARCHAR(16777216)
+        sample_values:
+          - BANDUNG
+          - JAKARTA
+          - SURABAYA
+      - name: MEMBERSHIP_TIER
+        description: The tier level of a customer's membership, indicating their loyalty program status, with levels including GOLD (highest), SILVER (mid-tier), and REGULAR (entry-level).
+        expr: MEMBERSHIP_TIER
+        data_type: VARCHAR(16777216)
+        sample_values:
+          - GOLD
+          - SILVER
+          - REGULAR
+      - name: OCCUPATION
+        description: The occupation of the customer, indicating their primary profession or role, such as a professional, engineer, or business owner.
+        expr: OCCUPATION
+        data_type: VARCHAR(16777216)
+        sample_values:
+          - PROFESSIONAL
+          - ENGINEER
+          - BUSINESS_OWNER
+      - name: PHONE
+        description: The customer's phone number, a unique identifier used for contact and communication purposes.
+        expr: PHONE
+        data_type: VARCHAR(16777216)
+        sample_values:
+          - '08129876543'
+          - '081344556677'
+          - '08123456789'
+      - name: PREFERRED_CAR_TYPE
+        description: The type of vehicle a customer prefers to purchase or lease, categorized as either a Multi-Purpose Vehicle (MPV), Hatchback, or Sports Utility Vehicle (SUV).
+        expr: PREFERRED_CAR_TYPE
+        data_type: VARCHAR(16777216)
+        sample_values:
+          - MPV
+          - HATCHBACK
+          - SUV
+    time_dimensions:
+      - name: REGISTRATION_DATE
+        description: Date when the customer registered with the company.
+        expr: REGISTRATION_DATE
+        data_type: DATE
+        sample_values:
+          - '2024-05-10'
+          - '2024-02-28'
+          - '2024-04-30'
+    primary_key:
+      columns:
+        - CUSTOMER_ID
+    unique_keys:
+      - columns:
+          - DRIVER_LICENSE_NUMBER
+  - name: RENTALS
+    description: This table stores information about car rentals, including the rental ID, car ID, customer ID, rental and return dates, total amount charged, rental status, duration, pickup location, and payment method.
+    base_table:
+      database: HACKATHON_SNOWFLAKE
+      schema: TRANSPORTATION
+      table: RENTALS
+    dimensions:
+      - name: CAR_ID
+        description: Unique identifier for the vehicle rented.
+        expr: CAR_ID
+        data_type: VARCHAR(16777216)
+        sample_values:
+          - '1'
+          - '7'
+          - '3'
+      - name: CUSTOMER_ID
+        description: Unique identifier for the customer renting a property.
+        expr: CUSTOMER_ID
+        data_type: VARCHAR(16777216)
+        sample_values:
+          - '105'
+          - '109'
+          - '119'
+      - name: PAYMENT_METHOD
+        description: The method used by the customer to make a payment for the rental, either by bank transfer or credit card.
+        expr: PAYMENT_METHOD
+        data_type: VARCHAR(16777216)
+        sample_values:
+          - TRANSFER
+          - CREDIT_CARD
+      - name: PICKUP_LOCATION
+        description: The location where the rental vehicle was picked up by the customer.
+        expr: PICKUP_LOCATION
+        data_type: VARCHAR(16777216)
+        sample_values:
+          - JAKARTA
+      - name: RENTAL_ID
+        description: Unique identifier for each rental transaction.
+        expr: RENTAL_ID
+        data_type: VARCHAR(16777216)
+        sample_values:
+          - '1004'
+          - '1002'
+          - '1038'
+      - name: STATUS
+        description: The current status of the rental, indicating whether it has been completed or is still active.
+        expr: STATUS
+        data_type: VARCHAR(16777216)
+        sample_values:
+          - COMPLETED
+          - ACTIVE
+    time_dimensions:
+      - name: ACTUAL_RETURN_DATE
+        description: The date and time when a rented item was actually returned.
+        expr: ACTUAL_RETURN_DATE
+        data_type: TIMESTAMP_NTZ(9)
+        sample_values:
+          - 2025-01-07T00:00:00.000+0000
+          - 2025-01-28T00:00:00.000+0000
+          - 2025-08-30T00:00:00.000+0000
+      - name: RENTAL_DATE
+        description: Date and time when the rental took place.
+        expr: RENTAL_DATE
+        data_type: TIMESTAMP_NTZ(9)
+        sample_values:
+          - 2025-02-11T00:00:00.000+0000
+          - 2025-01-02T00:00:00.000+0000
+          - 2025-08-09T00:00:00.000+0000
+      - name: RETURN_DATE
+        description: The date and time when a rental item is expected to be returned.
+        expr: RETURN_DATE
+        data_type: TIMESTAMP_NTZ(9)
+        sample_values:
+          - 2025-01-08T00:00:00.000+0000
+          - 2025-01-12T00:00:00.000+0000
+          - 2025-03-02T00:00:00.000+0000
+    facts:
+      - name: RENTAL_DURATION_DAYS
+        description: The number of days a rental agreement is active.
+        expr: RENTAL_DURATION_DAYS
+        data_type: NUMBER(38,0)
+        access_modifier: public_access
+        sample_values:
+          - '2'
+          - '1'
+          - '5'
+      - name: TOTAL_AMOUNT
+        description: The total amount paid for a rental.
+        expr: TOTAL_AMOUNT
+        data_type: FLOAT
+        access_modifier: public_access
+        sample_values:
+          - '1200000'
+          - '1680000'
+          - '500000'
+    primary_key:
+      columns:
+        - RENTAL_ID
+  - name: VEHICLE_TELEMETRY_COMPLETE
+    description: This table stores real-time telemetry data for vehicles, including location, speed, battery and fuel levels, odometer and engine hours, and rental status, allowing for monitoring and analysis of vehicle performance and usage.
+    base_table:
+      database: HACKATHON_SNOWFLAKE
+      schema: TRANSPORTATION
+      table: VEHICLE_TELEMETRY_COMPLETE
+    dimensions:
+      - name: LOCATION_ADDRESS
+        description: The physical address of the vehicle's location, including street name and city.
+        expr: LOCATION_ADDRESS
+        data_type: VARCHAR(16777216)
+        sample_values:
+          - JL Sudirman JAKARTA
+          - Plaza Senayan JAKARTA
+          - Plaza Indonesia JAKARTA
+      - name: RENTAL_ID
+        description: Unique identifier for a rental vehicle.
+        expr: RENTAL_ID
+        data_type: VARCHAR(16777216)
+        sample_values:
+          - '1004'
+          - '1002'
+          - '1003'
+      - name: TRIP_STATUS
+        description: The current status of the vehicle, indicating whether it is currently parked or in motion.
+        expr: TRIP_STATUS
+        data_type: VARCHAR(16777216)
+        sample_values:
+          - PARKED
+          - MOVING
+      - name: VEHICLE_ID
+        description: Unique identifier for a vehicle in the fleet, used to track and analyze telemetry data for that specific vehicle.
+        expr: VEHICLE_ID
+        data_type: VARCHAR(16777216)
+        sample_values:
+          - '1'
+          - '7'
+          - '3'
+    time_dimensions:
+      - name: TIMESTAMP
+        description: Date and time when the vehicle telemetry data was recorded, in ISO 8601 format with millisecond precision and UTC timezone offset.
+        expr: TIMESTAMP
+        data_type: TIMESTAMP_NTZ(9)
+        sample_values:
+          - 2025-01-07T07:58:55.000+0000
+          - 2025-01-02T12:24:55.000+0000
+          - 2025-01-12T16:23:45.000+0000
+    facts:
+      - name: BATTERY_LEVEL
+        description: The percentage of battery life remaining in the vehicle.
+        expr: BATTERY_LEVEL
+        data_type: FLOAT
+        access_modifier: public_access
+        sample_values:
+          - '85.1'
+          - '91.5'
+          - '91.8'
+      - name: ENGINE_HOURS
+        description: The total number of hours the vehicle's engine has been in operation.
+        expr: ENGINE_HOURS
+        data_type: FLOAT
+        access_modifier: public_access
+        sample_values:
+          - '1000.9'
+          - '4501.6'
+          - '2950.9'
+      - name: FUEL_LEVEL
+        description: The percentage of fuel remaining in the vehicle's tank.
+        expr: FUEL_LEVEL
+        data_type: FLOAT
+        access_modifier: public_access
+        sample_values:
+          - '97'
+          - '93'
+          - '94'
+      - name: LATITUDE
+        description: The latitude coordinate of the vehicle's location, measured in decimal degrees, with negative values indicating locations in the Southern Hemisphere.
+        expr: LATITUDE
+        data_type: FLOAT
+        access_modifier: public_access
+        sample_values:
+          - '-6.193556'
+          - '-6.193441'
+          - '-6.18979'
+      - name: LONGITUDE
+        description: The longitude coordinate of the vehicle's location, measured in decimal degrees, representing the distance east or west of the prime meridian.
+        expr: LONGITUDE
+        data_type: FLOAT
+        access_modifier: public_access
+        sample_values:
+          - '106.822313'
+          - '112.734752'
+          - '112.75363'
+      - name: ODOMETER
+        description: The total distance traveled by the vehicle, measured in miles, as recorded by the vehicle's odometer.
+        expr: ODOMETER
+        data_type: FLOAT
+        access_modifier: public_access
+        sample_values:
+          - '16005'
+          - '48013'
+          - '16023'
+      - name: SPEED
+        description: The speed of the vehicle at the time of data collection, measured in miles per hour.
+        expr: SPEED
+        data_type: FLOAT
+        access_modifier: public_access
+        sample_values:
+          - '0'
+          - '50'
+          - '47'
+    unique_keys:
+      - columns:
+          - RENTAL_ID
+          - LATITUDE
+          - LONGITUDE
+relationships:
+  - name: RENTALS_CARS
+    left_table: RENTALS
+    right_table: CARS
+    relationship_columns:
+      - left_column: CAR_ID
+        right_column: CAR_ID
+    relationship_type: many_to_one
+    join_type: left_outer
+  - name: RENTALS_CUST
+    left_table: RENTALS
+    right_table: CUSTOMERS
+    relationship_columns:
+      - left_column: CUSTOMER_ID
+        right_column: CUSTOMER_ID
+    relationship_type: many_to_one
+    join_type: left_outer
+  - name: TELEMATICS
+    left_table: VEHICLE_TELEMETRY_COMPLETE
+    right_table: RENTALS
+    relationship_columns:
+      - left_column: RENTAL_ID
+        right_column: RENTAL_ID
+    relationship_type: many_to_one
+    join_type: left_outer
