@@ -21,7 +21,7 @@ BEGIN
     -- Cek data
     SELECT COUNT(1)
     INTO v_data_count
-    FROM HACKATHON_SNOWFLAKE.TRANSPORTATION.VEHICLE_TELEMETRY_COMPLETE;
+    FROM HACKATHON_SNOWFLAKE.TRANSPORTATION.VEHICLE_TELEMETRY;
 
     -- Hitung jumlah file di internal stage folder 'vehicle_telemetry/'
     SELECT COUNT(*) 
@@ -40,12 +40,12 @@ BEGIN
     ELSEIF (v_data_count > 0 AND v_data_count > 0) THEN
     
         -- Hapus data pada tabel untuk periode tersebut
-        v_sql := 'DELETE FROM HACKATHON_SNOWFLAKE.TRANSPORTATION.VEHICLE_TELEMETRY_COMPLETE
+        v_sql := 'DELETE FROM HACKATHON_SNOWFLAKE.TRANSPORTATION.VEHICLE_TELEMETRY
                   WHERE PERIOD = ' || v_period;
         EXECUTE IMMEDIATE v_sql;
     
         -- Copy file CSV dari stage ke tabel
-        v_sql := 'COPY INTO HACKATHON_SNOWFLAKE.TRANSPORTATION.VEHICLE_TELEMETRY_COMPLETE
+        v_sql := 'COPY INTO HACKATHON_SNOWFLAKE.TRANSPORTATION.VEHICLE_TELEMETRY
                   FROM (
                     SELECT 
                         TO_CHAR(TRY_TO_TIMESTAMP($2), ''YYYYMM'') AS PERIOD,
