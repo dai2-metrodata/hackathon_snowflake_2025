@@ -10,6 +10,7 @@ DECLARE
     v_sql       STRING;
     v_curr_timestamp TIMESTAMP;
     v_file_count NUMBER;
+    v_data_count NUMBER;
 BEGIN
     -- Ambil nilai tahun, bulan, dan periode (YYYYMM)
     v_year   := YEAR(P_START_DATE);
@@ -17,6 +18,11 @@ BEGIN
     v_period := TO_CHAR(P_START_DATE, 'YYYYMM');
     v_curr_timestamp := CONVERT_TIMEZONE('Asia/Jakarta', CURRENT_TIMESTAMP());
 
+    -- Cek data
+    SELECT COUNT(1)
+    INTO v_data_count
+    FROM HACKATHON_SNOWFLAKE.TRANSPORTATION.RENTALS;
+    
     -- Hitung jumlah file di internal stage folder 'rentals/'
     SELECT COUNT(*) 
     INTO v_file_count
@@ -24,8 +30,14 @@ BEGIN
     WHERE relative_path LIKE 'rentals/year=' || :v_year || '/month=' || :v_month || '/%'
        OR STARTSWITH(relative_path, 'rentals/year=' || :v_year || '/month=' || :v_month || '/');
 
-    -- Jika ada file, lanjutkan proses
-    IF (v_file_count > 0) THEN
+       -- Jika ada file dan data masih kosong, CALL SP Ingestion
+    IF (v_file_count > 0 AND v_data_count = 0) THEN
+    
+        CALL HACKATHON_SNOWFLAKE.TRANSPORTATION.SP_ING_RENTALS_VEHICLE('rentals');
+
+        RETURN '✅ Data loaded successfully from all paths';
+        
+    ELSEIF (v_data_count > 0 AND v_data_count > 0) THEN
         
         -- Hapus data pada tabel untuk periode tersebut
         v_sql := 'DELETE FROM HACKATHON_SNOWFLAKE.TRANSPORTATION.RENTALS
