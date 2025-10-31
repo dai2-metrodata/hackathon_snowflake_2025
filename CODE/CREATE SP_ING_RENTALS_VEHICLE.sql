@@ -79,6 +79,9 @@ BEGIN
         
         RETURN '✅ Data ' || :v_name_table || ' loaded successfully from all paths';
 
+    ELSE    
+        RETURN '⚠️ Invalid Parameter (vehicle_telemetery or rentals)';
+
     END IF;
     
 END;
