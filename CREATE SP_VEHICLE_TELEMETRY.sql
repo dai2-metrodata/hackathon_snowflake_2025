@@ -1,4 +1,4 @@
-CREATE OR REPLACE PROCEDURE SP_VEHICLE_TELEMETRY(P_START_DATE DATE)
+CREATE OR REPLACE PROCEDURE HACKATHON_SNOWFLAKE.TRANSPORTATION.SP_VEHICLE_TELEMETRY(P_START_DATE DATE)
 RETURNS STRING
 LANGUAGE SQL
 AS
@@ -10,12 +10,18 @@ DECLARE
     v_sql       STRING;
     v_curr_timestamp TIMESTAMP;
     v_file_count NUMBER;
+    v_data_count NUMBER;
 BEGIN
     -- Ambil nilai tahun, bulan, dan periode (YYYYMM)
     v_year   := YEAR(P_START_DATE);
     v_month  := MONTH(P_START_DATE);
     v_period := TO_CHAR(P_START_DATE, 'YYYYMM');
     v_curr_timestamp := CONVERT_TIMEZONE('Asia/Jakarta', CURRENT_TIMESTAMP());
+
+    -- Cek data
+    SELECT COUNT(1)
+    INTO v_data_count
+    FROM HACKATHON_SNOWFLAKE.TRANSPORTATION.VEHICLE_TELEMETRY_COMPLETE;
 
     -- Hitung jumlah file di internal stage folder 'vehicle_telemetry/'
     SELECT COUNT(*) 
@@ -24,9 +30,15 @@ BEGIN
     WHERE relative_path LIKE 'vehicle_telemetry/year=' || :v_year || '/month=' || :v_month || '/%'
        OR STARTSWITH(relative_path, 'vehicle_telemetry/year=' || :v_year || '/month=' || :v_month || '/');
 
-    -- Jika ada file, lanjutkan proses
-    IF (v_file_count > 0) THEN
+        -- Jika ada file dan data masih kosong, CALL SP Ingestion
+    IF (v_file_count > 0 AND v_data_count = 0) THEN
+    
+        CALL HACKATHON_SNOWFLAKE.TRANSPORTATION.SP_ING_RENTALS_VEHICLE('vehicle_telemetry');
+
+        RETURN '✅ Data loaded successfully from all paths';
         
+    ELSEIF (v_data_count > 0 AND v_data_count > 0) THEN
+    
         -- Hapus data pada tabel untuk periode tersebut
         v_sql := 'DELETE FROM HACKATHON_SNOWFLAKE.TRANSPORTATION.VEHICLE_TELEMETRY_COMPLETE
                   WHERE PERIOD = ' || v_period;
