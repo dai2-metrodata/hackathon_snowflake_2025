@@ -16,7 +16,7 @@ BEGIN
     
         -- COPY INTO VEHICLE_TELEMETRY
         v_sql := 
-        'COPY INTO HACKATHON_SNOWFLAKE.TRANSPORTATION.vehicle_telemetry_complete
+        'COPY INTO HACKATHON_SNOWFLAKE.TRANSPORTATION.vehicle_telemetry
          FROM (
              SELECT 
                  TO_CHAR(TRY_TO_TIMESTAMP($2), ''YYYYMM'') AS PERIOD,
