@@ -31,13 +31,13 @@ BEGIN
        OR STARTSWITH(relative_path, 'vehicle_telemetry/year=' || :v_year || '/month=' || :v_month || '/');
 
         -- Jika ada file dan data masih kosong, CALL SP Ingestion
-    IF (v_file_count > 0 AND v_data_count = 0) THEN
+    IF (v_data_count = 0) THEN
     
         CALL HACKATHON_SNOWFLAKE.TRANSPORTATION.SP_ING_RENTALS_VEHICLE('vehicle_telemetry');
 
         RETURN '✅ Data loaded successfully from all paths';
         
-    ELSEIF (v_data_count > 0 AND v_data_count > 0) THEN
+    ELSEIF (v_file_count > 0 AND v_data_count > 0) THEN
     
         -- Hapus data pada tabel untuk periode tersebut
         v_sql := 'DELETE FROM HACKATHON_SNOWFLAKE.TRANSPORTATION.VEHICLE_TELEMETRY

@@ -1,5 +1,5 @@
 
--- CREATE TABLE
+-- Begin CREATE TABLE
 
 CREATE OR REPLACE TABLE HACKATHON_SNOWFLAKE.TRANSPORTATION.vehicle_telemetry (
     period VARCHAR,
@@ -96,5 +96,5 @@ from maintenances m
 inner join cars c
 on c.car_id = m.car_id
 
----------------------------------------
+-- End CREATE TABLE
 
