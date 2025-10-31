@@ -50,7 +50,8 @@
 - `SP_MAINTENANCES`  
 - `SP_MAINTENANCES_INFO`  
 - `SP_RENTALS`  
-- `SP_VEHICLE_TELEMETRY`  
+- `SP_VEHICLE_TELEMETRY`
+- `SP_ING_RENTALS_VEHICLE`
 
 > Semua prosedur ini mengambil data dari **stage internal** `Transportation_INT_stage` dan mengisi tabel target di schema `Transportation`.
 
@@ -77,8 +78,8 @@
 Clone proyek dari GitHub ke lokal:
 
 ```bash
-git clone https://github.com/<your-username>/SmartRental_AI_Hackathon.git
-cd SmartRental_AI_Hackathon
+git clone https://github.com/dai2-metrodata/hackathon_snowflake_2025.git
+cd hackathon_snowflake_2025
 ```
 
 ### 🔹 2️⃣ Upload Dataset ke Snowflake Stage
@@ -101,14 +102,14 @@ CALL SP_CARS();
 CALL SP_CUSTOMERS();
 CALL SP_MAINTENANCES();
 CALL SP_MAINTENANCES_INFO();
-CALL SP_RENTALS();
-CALL SP_VEHICLE_TELEMETRY();
+CALL SP_RENTALS(CURRENT_DATE());
+CALL SP_VEHICLE_TELEMETRY(CURRENT_DATE());
 ```
 Atau scheduled by task_graph, Hasil: Semua data berhasil dimasukkan ke tabel-tabel di schema Transportation.
 
 ### 🔹 4️⃣ Buat Semantic Views
 
-Buat semantic views untuk digunakan di Snowflake Cortex GUI (Cortex Analyst)
+Buat semantic views untuk digunakan di Snowflake Intelligence Agent-GUI (Cortex Analyst)
 
 ### 🔹 5️⃣ Development Procedures untuk Custom Tools:
 
@@ -124,16 +125,17 @@ RETURNS STRING LANGUAGE SQL AS $$ ... $$;
 
 ### 🔹 6️⃣ Konfigurasi Snowflake Cortex Intelligence Agent
 
-1. Masuk ke Snowflake Console → Cortex → Agents
+1. Masuk ke Snowflake Console → AI & ML → Agents
 2. Klik Create Agent
 3. Tambahkan konfigurasi berikut:
-    Semantic Views:
+```
+Semantic Views:
         - Customer_fleet_analytics
-    Cortex Search Service:
+Cortex Search Service:
         - Maintenance_service
-    Custom Tools:
+Custom Tools:
         - Send_Email, Send_telegram_message
-
+```
 4. Klik Save & Deploy
 5. Tes pertanyaan berikut di GUI:
 ```
