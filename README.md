@@ -228,7 +228,7 @@ Example quetions :
 “Siapa pelanggan paling loyal bulan ini?”
 ```
 
-### 🔹 7️⃣ Konfigurasi Snowflake Intelligence Agent
+### 🔹 7️⃣ Snowflake Intelligence
 
 1. Masuk ke Snowflake Console → AI & ML → Snowflake Intelligence
 2. Login dengan akun snowflake kamu
