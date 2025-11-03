@@ -1,4 +1,4 @@
-# Smart Fleet Monitoring & Analysis - Hackathon Submission
+# Smart Fleet Monitoring & Analysis Assistance - Hackathon Submission
 
 ## 👥 Team
 
@@ -56,8 +56,12 @@
 > Semua prosedur ini mengambil data dari **stage internal** `Transportation_INT_stage` dan mengisi tabel target di schema `Transportation`.
 
 ---
+## 5. Data Governance 
+### Column Level Security (Data Masking)
+Table : Customers
+Column : Phone, Email, Driver License Number
 
-## 5. Snowflake Intelligence Integration = Smart Fleet Monitoring & Analysis Agent
+## 6. Snowflake Intelligence Integration = Smart Fleet Monitoring & Analysis Agent
 ### Agent Configuration
 - **Semantic Views**: `CUSTOMER_FLEET_ANALYTICS`
 - **Cortex Search Services**: `MAINTENANCE_SERVICE`  
@@ -76,7 +80,7 @@
 
 ---
 
-## 6. How to Run / Development Notes
+## 7. How to Run / Development Notes
 
 ### 🔹 1️⃣A Clone Repository
 Clone proyek dari GitHub ke lokal:
@@ -95,10 +99,15 @@ cd hackathon_snowflake_2025
 ```
 4. Pilih API Integration untuk yang sudah dibuat, Jika belum buat dengan menjalankan query berikut :
 ```
+    
     CREATE OR REPLACE API INTEGRATION my_git_api_integration
-      API_PROVIDER = git_https_api
-      API_ALLOWED_PREFIXES = ('https://example.com/my-account')
-      ENABLED = TRUE;
+    API_PROVIDER = git_https_api
+    API_ALLOWED_PREFIXES = ('https://github.com/dai2-metrodata/')
+    API_USER_AUTHENTICATION = (
+    TYPE = snowflake_github_app
+    )
+    ENABLED = TRUE;
+
 ```
 5. klik Create
 
@@ -112,14 +121,14 @@ cd hackathon_snowflake_2025
 
 ### 🔹 4️⃣A  Buat Stored Procedure dan Task untuk Ingestion Data 
 
-- `CREATE SP_CARS.sql`
-- `CREATE SP_CUSTOMERS.sql`
-- `CREATE SP_MAINTENANCES.sql`
-- `CREATE SP_MAINTENANCES_INFO.sql`
-- `CREATE SP_RENTALS.sql`
-- `CREATE SP_VEHICLE_TELEMETRY.sql`
-- `CREATE SP_ING_RENTALS_VEHICLE.sql`
-- `CREATE TASK.sql`
+- `run script SP_CARS.sql`
+- `run script SP_CUSTOMERS.sql`
+- `run script SP_MAINTENANCES.sql`
+- `run script SP_MAINTENANCES_INFO.sql`
+- `run script SP_RENTALS.sql`
+- `run script SP_VEHICLE_TELEMETRY.sql`
+- `run script SP_ING_RENTALS_VEHICLE.sql`
+- `run script TASK.sql`
 
 
 ### 🔹 4️⃣B  Jalankan Stored Procedures untuk Ingestion
@@ -177,9 +186,9 @@ Buat semantic views untuk digunakan di Snowflake Intelligence Agent-GUI (Cortex 
 
 ```
 
-### 🔹 5️⃣C  Buat Stored Procedures untuk Custom Tools:
+### 🔹 5️⃣C Buat Stored Procedures untuk Custom Tools:
 
-Daftarkan semua custom tools (procedure):
+Daftarkan semua custom tools (procedure) -> sudah dicreate di setup.sql
 ```sql
 -- Notification handlers
 CREATE OR REPLACE PROCEDURE SEND_EMAIL() 
@@ -215,18 +224,77 @@ Example quetions :
 10. Pada Tab Tools Tambahkan konfigurasi berikut:
 
 ```
-- Cortex Analyst → Semantic Views → Customer_fleet_analytics
+- Cortex Analyst → Semantic Views → Customer_fleet_analytics'
+  Name : FleetAnalystTools
+  Description : Generate with Cortex
+  
 - Cortex Search Services → MAINTENANCE_SERVICE
-- Custom Tools → SEND_EMAIL, SEND_TELTEG
-```
-11. Klik Save & Deploy
+  ID column : MAINTENANCE_ID
+  Name : MaintenanceTools
+  Description : Tools ini membantu anda untuk melihat riwayat dan jadwal detail maintenance kendaraan dari table Maintenances
+  
+- Custom Tools → SEND_EMAIL, SEND_TELEGRAM
+  Resource type : procedure
+  Name : SendEmailTools
+  Description : Generate with Cortex
+  Desc Parameter body : Use HTML-Syntax for this. If the content you get is in markdown, translate it to HTML. If body is not provided, summarize the last question and use that as content for the email.
+  Desc Parameter subject : If subject is not provided, use "Snowflake Intelligence".
 
-12. Tes pertanyaan berikut di GUI:
+  Resource type : procedure
+  Name : SendTelegramTools
+  Description : Tools untuk mengirim pesan lewat telegram. Kirim kan retrun value berupa url/link dan informasikan kepada pengguna untuk membuka url/link tersebut secara manual di browser.
+  Desc Parameter body : Use HTML-Syntax for this. If the content you get is in markdown, translate it to HTML. If body is not provided, summarize the last question and use that as content for the email.
+  Desc Parameter subject : If subject is not provided, use "Snowflake Intelligence".''
+```
+11. Pada Tab Orchestration Tambahkan konfigurasi berikut:
+Orhestration Instructions : Gunakan Maintenance Tools terlebih dahulu jika berhubungan dengan data riwayat maintenance untuk mencari penyebab kerusakan.
+
+12. Klik Save & Deploy
+
+13. Tes pertanyaan berikut di GUI:
 ```
 “Kapan mobil Toyota Avanza perlu servis berikutnya?”
 “Mobil mana yang idle lebih dari 5 hari?”
 “Siapa pelanggan paling loyal bulan ini?”
 ```
+### 🔹 6️⃣ Konfigurasi User dan Role
+use role accountadmin;
+    
+    CREATE USER beni
+    PASSWORD = 'SecurePassword123!'
+    DEFAULT_ROLE = 'ADMIN_ROLE'
+    DEFAULT_WAREHOUSE = 'COMPUTE_WH';
+
+    grant role ADMIN_ROLE to user beni;
+    grant usage on database hackathon_snowflake to role ADMIN_ROLE;
+    grant usage on schema TRANSPORTATION to role ADMIN_ROLE;
+    GRANT SELECT ON ALL TABLES IN schema TRANSPORTATION TO ROLE ADMIN_ROLE;
+    GRANT USAGE ON ALL CORTEX SEARCH SERVICES IN schema TRANSPORTATION TO ROLE ADMIN_ROLE;
+    GRANT ALL ON ALL SEMANTIC VIEWS IN schema TRANSPORTATION TO ROLE ADMIN_ROLE;
+    GRANT USAGE ON ALL PROCEDURES IN schema TRANSPORTATION TO ROLE ADMIN_ROLE;
+    GRANT USAGE ON WAREHOUSE COMPUTE_WH TO ROLE ADMIN_ROLE;
+    
+    grant usage on database SNOWFLAKE_INTELLIGENCE to role ADMIN_ROLE;
+    grant usage on schema SNOWFLAKE_INTELLIGENCE.AGENTS to role ADMIN_ROLE;
+    GRANT USAGE ON AGENT SNOWFLAKE_INTELLIGENCE.AGENTS.SMARTFLEETMONITORINGAGENT to ROLE ADMIN_ROLE;
+
+    CREATE USER siska
+    PASSWORD = 'SecurePassword123!'
+    DEFAULT_ROLE = 'ANALYST_ROLE'
+    DEFAULT_WAREHOUSE = 'COMPUTE_WH';
+
+    grant role ANALYST_ROLE to user siska;
+    grant usage on database hackathon_snowflake to role ANALYST_ROLE;
+    grant usage on schema TRANSPORTATION to role ANALYST_ROLE;
+    GRANT SELECT ON ALL TABLES IN schema TRANSPORTATION TO ROLE ANALYST_ROLE;
+    GRANT USAGE ON ALL CORTEX SEARCH SERVICES IN schema TRANSPORTATION TO ROLE ANALYST_ROLE;
+    GRANT ALL ON ALL SEMANTIC VIEWS IN schema TRANSPORTATION TO ROLE ANALYST_ROLE;
+    GRANT USAGE ON ALL PROCEDURES IN schema TRANSPORTATION TO ROLE ANALYST_ROLE;
+    GRANT USAGE ON WAREHOUSE COMPUTE_WH TO ROLE ANALYST_ROLE;
+    
+    grant usage on database SNOWFLAKE_INTELLIGENCE to role ANALYST_ROLE;
+    grant usage on schema SNOWFLAKE_INTELLIGENCE.AGENTS to role ANALYST_ROLE;
+    GRANT USAGE ON AGENT SNOWFLAKE_INTELLIGENCE.AGENTS.SMARTFLEETMONITORINGAGENT to ROLE ANALYST_ROLE;
 
 ### 🔹 7️⃣ Snowflake Intelligence
 
