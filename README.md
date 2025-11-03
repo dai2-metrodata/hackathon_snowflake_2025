@@ -30,10 +30,7 @@
 - `MAINTENANCES`  
 - `MAINTENANCES_INFO` (hasil join `MAINTENANCES` + `CARS`)  
 - `RENTALS`  
-- `VEHICLE_TELEMETRY`
-
-### Semantic Views (Cortex GUI)
-- `CUSTOMER_FLEET_ANALYTICS`  
+- `VEHICLE_TELEMETRY` 
 
 ---
 
@@ -58,8 +55,8 @@
 ---
 ## 5. Data Governance 
 ### Column Level Security (Data Masking)
-Table : Customers
-Column : Phone, Email, Driver License Number
+- **Table** : Customers
+- **Column** : Phone, Email, Driver License Number
 
 ## 6. Snowflake Intelligence Integration = Smart Fleet Monitoring & Analysis Agent
 ### Agent Configuration
@@ -258,7 +255,8 @@ Orhestration Instructions : Gunakan Maintenance Tools terlebih dahulu jika berhu
 “Siapa pelanggan paling loyal bulan ini?”
 ```
 ### 🔹 6️⃣ Konfigurasi User dan Role
-use role accountadmin;
+    ```
+    use role accountadmin;
     
     CREATE USER beni
     PASSWORD = 'SecurePassword123!'
@@ -295,6 +293,7 @@ use role accountadmin;
     grant usage on database SNOWFLAKE_INTELLIGENCE to role ANALYST_ROLE;
     grant usage on schema SNOWFLAKE_INTELLIGENCE.AGENTS to role ANALYST_ROLE;
     GRANT USAGE ON AGENT SNOWFLAKE_INTELLIGENCE.AGENTS.SMARTFLEETMONITORINGAGENT to ROLE ANALYST_ROLE;
+    ```
 
 ### 🔹 7️⃣ Snowflake Intelligence
 
