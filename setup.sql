@@ -4,13 +4,16 @@ create or replace schema TRANSPORTATION;
 create or replace database SNOWFLAKE_INTELLIGENCE;
 create or replace schema AGENTS;
 
-CREATE NOTIFICATION INTEGRATION my_email_int
+CREATE OR REPLACE NOTIFICATION INTEGRATION my_email_int
   TYPE=EMAIL
   ENABLED=TRUE;
 
+USE DATABASE HACKATHON_SNOWFLAKE;
+USE SCHEMA TRANSPORTATION;
+
 ALTER ACCOUNT SET CORTEX_ENABLED_CROSS_REGION = 'aws_us';
 
-CREATE STAGE transportation_int_stage
+CREATE OR REPLACE STAGE transportation_int_stage
   DIRECTORY=(ENABLE=true);
 
 
@@ -149,10 +152,10 @@ CREATE OR REPLACE TABLE HACKATHON_SNOWFLAKE.TRANSPORTATION.TABLE_LOG (
 
 CREATE OR REPLACE TABLE HACKATHON_SNOWFLAKE.TRANSPORTATION.MAINTENANCES_INFO AS
 select m.*, c.license_plate, c.transmission, c.brand, c.model, c.year, c.fuel_type
-from maintenances m
-inner join cars c
+from HACKATHON_SNOWFLAKE.TRANSPORTATION.maintenances m
+inner join HACKATHON_SNOWFLAKE.TRANSPORTATION.cars c
 on c.car_id = m.car_id
-
+;
 -- End CREATE TABLE
     
 -- SP Custom Tools send email
@@ -193,7 +196,7 @@ def send_email(session, recipient_email, subject, body):
         ELSE 'MASKED'
       END;
   
-    ALTER TABLE customers MODIFY COLUMN email SET MASKING POLICY email_mask_policy;\
+    ALTER TABLE customers MODIFY COLUMN email SET MASKING POLICY email_mask_policy;
 
     
     CREATE OR REPLACE MASKING POLICY phone_mask_policy AS (val STRING) RETURNS STRING ->
