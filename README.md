@@ -159,7 +159,7 @@ Buat semantic views untuk digunakan di Snowflake Intelligence Agent-GUI (Cortex 
     CREATE OR REPLACE CORTEX SEARCH SERVICE maintenance_service
     ON listing_text
     ATTRIBUTES maintenance_type
-    WAREHOUSE = compute_small
+    WAREHOUSE = compute_wh
     TARGET_LAG = '1 hour'
     AS
         SELECT
@@ -221,9 +221,9 @@ Example quetions :
 10. Pada Tab Tools Tambahkan konfigurasi berikut:
 
 ```
-- Cortex Analyst → Semantic Views → Customer_fleet_analytics'
+- Cortex Analyst → Semantic model file → Customer_fleet_analytics'
   Name : FleetAnalystTools
-  Description : Generate with Cortex
+  Description : Klik Button -> Generate with Cortex
   
 - Cortex Search Services → MAINTENANCE_SERVICE
   ID column : MAINTENANCE_ID
@@ -240,19 +240,21 @@ Example quetions :
   Resource type : procedure
   Name : SendTelegramTools
   Description : Tools untuk mengirim pesan lewat telegram. Kirim kan retrun value berupa url/link dan informasikan kepada pengguna untuk membuka url/link tersebut secara manual di browser.
-  Desc Parameter body : Use HTML-Syntax for this. If the content you get is in markdown, translate it to HTML. If body is not provided, summarize the last question and use that as content for the email.
-  Desc Parameter subject : If subject is not provided, use "Snowflake Intelligence".''
+
 ```
 11. Pada Tab Orchestration Tambahkan konfigurasi berikut:
-Orhestration Instructions : Gunakan Maintenance Tools terlebih dahulu jika berhubungan dengan data riwayat maintenance untuk mencari penyebab kerusakan.
+**Orhestration Instructions** : Gunakan Maintenance Tools terlebih dahulu jika berhubungan dengan data riwayat maintenance untuk mencari penyebab kerusakan.
 
 12. Klik Save & Deploy
 
 13. Tes pertanyaan berikut di GUI:
 ```
-“Kapan mobil Toyota Avanza perlu servis berikutnya?”
-“Mobil mana yang idle lebih dari 5 hari?”
-“Siapa pelanggan paling loyal bulan ini?”
+“Customer yang paling sering rental mobil?”
+“Kendaraan mana yg sering disewa Customer tersebut tapi belum available?”
+“Kapan kendaraan tersebut harus dikembalikan ke rental?”
+“Dimana kendaraan tersebut saat ini?”
+“Kenapa kendaraan tersebut rusak?”
+“Bagaimana cara agar masalah kerusakan kendaraan seperti ini tidak terulang?”
 ```
 ### 🔹 6️⃣ Konfigurasi User dan Role
     ```
@@ -275,6 +277,7 @@ Orhestration Instructions : Gunakan Maintenance Tools terlebih dahulu jika berhu
     grant usage on database SNOWFLAKE_INTELLIGENCE to role ADMIN_ROLE;
     grant usage on schema SNOWFLAKE_INTELLIGENCE.AGENTS to role ADMIN_ROLE;
     GRANT USAGE ON AGENT SNOWFLAKE_INTELLIGENCE.AGENTS.SMARTFLEETMONITORINGAGENT to ROLE ADMIN_ROLE;
+    GRANT ALL ON STAGE HACKATHON_SNOWFLAKE.TRANSPORTATION.TRANSPORTATION_INT_STAGE to ROLE ADMIN_ROLE;
 
     CREATE USER siska
     PASSWORD = 'SecurePassword123!'
@@ -293,6 +296,7 @@ Orhestration Instructions : Gunakan Maintenance Tools terlebih dahulu jika berhu
     grant usage on database SNOWFLAKE_INTELLIGENCE to role ANALYST_ROLE;
     grant usage on schema SNOWFLAKE_INTELLIGENCE.AGENTS to role ANALYST_ROLE;
     GRANT USAGE ON AGENT SNOWFLAKE_INTELLIGENCE.AGENTS.SMARTFLEETMONITORINGAGENT to ROLE ANALYST_ROLE;
+    GRANT ALL ON STAGE HACKATHON_SNOWFLAKE.TRANSPORTATION.TRANSPORTATION_INT_STAGE to ROLE ANALYST_ROLE;
     ```
 
 ### 🔹 7️⃣ Snowflake Intelligence
